@@ -20,11 +20,19 @@ Emergency Reporting! This is the cool part.
 ### Installation
 `git clone this here repo`
 
-A virtualenv may be helpful (more details here)
+A virtualenv may be helpful - 64-bit Python 3.5 or 3.6 is the required is the
+required interpreter due to Tensorflow's requirements.
 
 `pip install -r requirements.txt`
 
 ### History
+- 4.2.18 Making tons of API requests for data - interestingly, a lot
+of accounts that have 10's or 100's of thousands of incidents also
+haven't written a single narrative. Data is cleaned to be without punctuation,
+all lowercase. Certain accounts with a large number of narratives may upset
+the count of frequent words, because the proper nouns they use end up appearing
+frequently enough to upset the contexts of other words.
+
 - 3.28.18 Initial commit, begin scraper
 
 ### License - MIT

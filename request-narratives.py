@@ -1,15 +1,21 @@
 import requests
 import json
 import sys
+import os
 
-AUTH_URL = "https://auth.emergencyreporting.com/Token.php"
+__author__ = 'Tim Woods'
+__copyright__ = 'Copyright (c) 2018 Tim Woods'
+__license__ = 'MIT'
+
+AUTH_URL = 'https://auth.emergencyreporting.com/Token.php'
 API_URL = 'https://api.emergencyreporting.com'
-ACCTS = [96]
+ACCTS = [1588, 288, 5798, 5751, 2682, 4508, 5919, 309, 363, 6654, 5346,
+         107, 864, 70, 1190, 5164, 2152, 143, 964, 248, 399, 5492, 5082,
+         5106, 2301, 6957, 447, 2643, 1811, 5010, 5592, 956, 1549, 2348]
 DEBUG = True
 
 
 def get_credentials(account):
-    ret = None
     with open('creds.json', 'r') as cred_file:
         ret = json.load(cred_file)
 
@@ -45,6 +51,18 @@ def get_request_wrapper(endpoint, headers):
     return json.loads(response.text)
 
 
+def get_equipment():
+    creds, pt = get_credentials(1500)
+    at = get_auth_and_refresh_token(creds, pt)
+
+
+    print(at)
+
+    endpoint = '/V1/equipment?limit=2000'
+    headers = define_headers(at, pt)
+    return get_request_wrapper(endpoint, headers)['equipment']
+
+
 def assert_each_narrative_has_text(returned_narratives):
     for n in returned_narratives:
         assert n
@@ -55,7 +73,7 @@ def get_narratives_for_account_number(acct_num):
     auth_tokens = get_auth_and_refresh_token(credentials, postman_token)
 
     def get_narratives(auth_tokens, post_token):
-        endpoint = '/V2/exposures/narratives?limit=100000'
+        endpoint = '/V2/exposures/narratives?limit=99999'
         headers = define_headers(auth_tokens, post_token)
         all_narratives = get_request_wrapper(endpoint, headers)
 
@@ -82,7 +100,7 @@ def print_progress_bar(iteration, total):
     bar_len = 40
     loaded_len = int(40 * (iteration / (total - 1)))
     loaded = '█' * loaded_len
-    unloaded = '░' * (bar_len - loaded_len)
+    unloaded = '-' * (bar_len - loaded_len)
     sys.stdout.write('\r' + loaded + unloaded + '\r')
     sys.stdout.flush()
     if iteration == total - 1:
@@ -91,7 +109,12 @@ def print_progress_bar(iteration, total):
 
 def main():
     for i, account_number in enumerate(ACCTS):
-        get_narratives_for_account_number(account_number)
+        print_progress_bar(i, len(ACCTS))
+        if not os.path.isfile(str(account_number) + '_checkpoint.json'):
+            try:
+                get_narratives_for_account_number(account_number)
+            except Exception:
+                print('Error - {}'.format(account_number))
 
 
 if __name__ == '__main__':
