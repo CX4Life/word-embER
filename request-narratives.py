@@ -9,7 +9,10 @@ __license__ = 'MIT'
 
 AUTH_URL = 'https://auth.emergencyreporting.com/Token.php'
 API_URL = 'https://api.emergencyreporting.com'
-ACCTS = [1588, 288, 5798, 5751, 2682, 4508, 5919, 309, 363, 6654, 5346,
+ACCTS = [12, 17, 20, 26, 43, 44, 51, 62, 66, 67, 82, 88, 90, 96, 326,
+         387, 628, 814, 1246, 1382, 1430, 1464, 1737, 1824, 2066, 2169,
+         2338, 2535, 2635, 2736, 2737, 5002,
+         1588, 288, 5798, 5751, 2682, 4508, 5919, 309, 363, 6654, 5346,
          107, 864, 70, 1190, 5164, 2152, 143, 964, 248, 399, 5492, 5082,
          5106, 2301, 6957, 447, 2643, 1811, 5010, 5592, 956, 1549, 2348]
 DEBUG = True
@@ -73,7 +76,7 @@ def get_narratives_for_account_number(acct_num):
     auth_tokens = get_auth_and_refresh_token(credentials, postman_token)
 
     def get_narratives(auth_tokens, post_token):
-        endpoint = '/V2/exposures/narratives?limit=99999'
+        endpoint = '/V2/exposures/narratives?limit=99999&&filter=isCADNarrative eq 0'
         headers = define_headers(auth_tokens, post_token)
         all_narratives = get_request_wrapper(endpoint, headers)
 
