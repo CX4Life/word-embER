@@ -31,6 +31,7 @@ def parse_args():
     parser.add_argument('-dim', help='Dimension of word embedding', type=int, default=300)
     parser.add_argument('-dict_size', help='Size of embedding dictionary', type=int, default=10000)
     parser.add_argument('-window', help='Size of context window', type=int, default=3)
+    parser.add_argument('-skips', help='Number of times to reuse input as label', type=int, default=2)
     parser.add_argument('-neg_samp', help='Number of negative sample for NCE', type=int, default=64)
 
     return parser.parse_args()
