@@ -9,7 +9,8 @@ __license__ = 'MIT'
 
 NARRATIVE_DIRECTORY = 'narrative_files/'
 
-def big_string_from_list(list_of_narratives):
+
+def apply_cleaning_to_string(s):
     def replace_whitespace(s):
         exclude = set(string.whitespace)
         return ''.join([ch if ch not in exclude else ' ' for ch in s])
@@ -23,11 +24,12 @@ def big_string_from_list(list_of_narratives):
         exclude = set(string.punctuation + string.digits)
         return ''.join([ch if ch not in exclude else '' for ch in s.lower()])
 
-    def apply_cleaning(s):
-        with_extra_spaces = remove_punctuation_and_digits(remove_undefined(replace_whitespace(s)))
-        return re.sub(' +', ' ', with_extra_spaces).lower()
+    with_extra_spaces = remove_punctuation_and_digits(remove_undefined(replace_whitespace(s)))
+    return re.sub(' +', ' ', with_extra_spaces).lower()
 
-    return ' '.join([apply_cleaning(x) for x in list_of_narratives])
+
+def big_string_from_list(list_of_narratives):
+    return ' '.join([apply_cleaning_to_string(x) for x in list_of_narratives])
 
 
 def all_accounts_narratives():

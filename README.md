@@ -26,6 +26,8 @@ required interpreter due to Tensorflow's requirements.
 `pip install -r requirements.txt`
 
 ### History
+- 4.9.18 Create string to embedding mapping.
+
 - 4.8.18 Used example word2vec to train embeddings after a long time trying to scratch
 build a model. Uploaded sample .npy file where order of rows corresponds to the rank
 of each word in rank2word.json. Plot shows cosine similarity of words. Of note, embeddings
