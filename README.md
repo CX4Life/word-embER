@@ -26,6 +26,12 @@ required interpreter due to Tensorflow's requirements.
 `pip install -r requirements.txt`
 
 ### History
+- 4.8.18 Used example word2vec to train embeddings after a long time trying to scratch
+build a model. Uploaded sample .npy file where order of rows corresponds to the rank
+of each word in rank2word.json. Plot shows cosine similarity of words. Of note, embeddings
+created with window size of 5, i.e. `[context, context, target, context, context]` for
+evaluation of each target word embedding.
+
 - 4.2.18 Making tons of API requests for data - interestingly, a lot
 of accounts that have 10's or 100's of thousands of incidents also
 haven't written a single narrative. Data is cleaned to be without punctuation,
