@@ -15,6 +15,7 @@ def sort_word_embeddings_by_norm():
     norm_word_pairs.sort(reverse=True)
     return norm_word_pairs
 
+
 def get_high_norm_words(num_to_return, as_percentage=False):
     norm_word_pairs = sort_word_embeddings_by_norm()
     if as_percentage:
@@ -94,21 +95,26 @@ def compute_is_valid_narrative(given_narrative):
     return cosine(this_narrative_vector, canon_vector)
 
 
+def score_string_set(num_subject_words, subect_wordset, list_of_strings):
+
+    def first_ten_words(string):
+        return ' '.join(string.split(' ')[:10])
+
+    results = []
+    for string in list_of_strings:
+        results.append({
+            'String': first_ten_words(string),
+            'Confidence': compute_is_valid_narrative(string),
+            'Subjects': get_top_n_words(num_subject_words, string, subect_wordset)
+        })
+    return results
+
+
 if __name__ == '__main__':
     central_words = get_central_norm_words(20, as_percent=True)
-    test_string = 'While in service for fuel Engine-31 heard a report of a vehicle fire at building 20190; Engine-41 was being dispatched to this emergency. Engine-31 lieutenant asked Chief-1 if he wanted Engine-41 to stand down due to Engine-31 being closer to the incident. Chief-1 approved and Engine-31 was dispatched to the incident. Firefighters donned all protective structural fire equipment and responded to the address. Chief 1 also responded to this incident. Crew arrived on scene, established command, and confirmed there was no active fire. Further investigation revealed the soldiers working on the vehicle utilized a 10-pound Class ABC extinguisher to extinguish the fire. Thermal imager camera was utilized by fire crew and confirmed no hot spots or active fire. Chief-1 arrived on scene and was briefed on the findings. Soldiers on scene stated the fire started under the crew chief side seat. (Possibly due to the alternator). They also secured main power to the vehicle to prevent further damage. Soldiers started complaining of irritation to their eyes and throat; dispatch was advised to notify EMS and have a unit respond. In the meantime, soldiers were escorted to an eye wash station inside the warehouse to flush out their eyes. Medic-5 arrived on scene and was briefed on the patients. Patients refused further medical treatment. Emergency was terminated for Engine-31, Chief-1, and Medic-5. End report.'
-    print(get_top_n_words(20, test_string, limited_set=central_words))
-    exit(0)
-    print(compute_is_valid_narrative(test_string))
     import json
+    import pprint
     with open('json/cosine_samples.json') as cs_samples:
         list_of_samples = json.load(cs_samples)
-    test_string_good = list_of_samples[0]
-    test_string_related = list_of_samples[1]
-    test_string_unrelated = list_of_samples[2]
-    test_string_nonsense = list_of_samples[3]
-
-    print(compute_is_valid_narrative(test_string_good))
-    print(compute_is_valid_narrative(test_string_related))
-    print(compute_is_valid_narrative(test_string_unrelated))
-    print(compute_is_valid_narrative(test_string_nonsense))
+    pp = pprint.PrettyPrinter(indent=2)
+    pp.pprint(score_string_set(10, central_words, list_of_samples))
