@@ -3,12 +3,14 @@ from cbow_from_json import apply_cleaning_to_string
 
 EMBEDDING_LOOKUP_FILENAME = 'embedding_lookup.npy'
 UNKNOWN_TOKEN = 'UNK'
+JSON_DIR = 'json/'
+NPARRAY_DIR = 'numpy_arrays/'
 
 
 def load_lookup():
     """Loads embedding lookup file. For ease of use, returns a Python dictionary"""
     py_dict = {}
-    np_lookup = np.load(EMBEDDING_LOOKUP_FILENAME)
+    np_lookup = np.load(NPARRAY_DIR + EMBEDDING_LOOKUP_FILENAME)
     for key in np_lookup.item().keys():
         py_dict[key] = np_lookup.item().get(key)
     return py_dict
@@ -40,7 +42,7 @@ def string_to_aggregate_vector(string):
 def main():
     from scipy.spatial.distance import cosine
     import json
-    with open('json/cosine_samples.json') as cs_samples:
+    with open(JSON_DIR + 'cosine_samples.json') as cs_samples:
         list_of_samples = json.load(cs_samples)
     test_string_good = list_of_samples[0]
     test_string_related = list_of_samples[1]

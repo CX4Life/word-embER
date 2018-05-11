@@ -2,7 +2,7 @@ import numpy as np
 from string_to_embeddings import load_lookup
 from string_to_embeddings import string_to_aggregate_vector
 
-CANONCIAL_NARRATIVE_VECTOR_FILENAME = 'canonvect.npy'
+CANONCIAL_NARRATIVE_VECTOR_FILENAME = 'numpy_arrays/canonvect.npy'
 
 
 def sort_word_embeddings_by_norm():
@@ -104,7 +104,7 @@ def score_string_set(num_subject_words, subect_wordset, list_of_strings):
     for string in list_of_strings:
         results.append({
             'String': first_ten_words(string),
-            'Confidence': compute_is_valid_narrative(string),
+            #'Confidence': compute_is_valid_narrative(string),
             'Subjects': get_top_n_words(num_subject_words, string, subect_wordset)
         })
     return results
@@ -116,5 +116,5 @@ if __name__ == '__main__':
     import pprint
     with open('json/cosine_samples.json') as cs_samples:
         list_of_samples = json.load(cs_samples)
-    pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(score_string_set(10, central_words, list_of_samples))
+    pp = pprint.PrettyPrinter(indent=2, width=100)
+    pp.pprint(score_string_set(5, central_words, list_of_samples))
