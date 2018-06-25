@@ -15,7 +15,6 @@ ACCTS = [12, 17, 20, 26, 43, 44, 51, 62, 66, 67, 82, 88, 90, 96, 326,
          1588, 288, 5798, 5751, 2682, 4508, 5919, 309, 363, 6654, 5346,
          107, 864, 70, 1190, 5164, 2152, 143, 964, 248, 399, 5492, 5082,
          5106, 2301, 6957, 447, 2643, 1811, 5010, 5592, 956, 1549, 2348]
-DEBUG = True
 
 
 def get_credentials(account):
@@ -57,8 +56,6 @@ def get_request_wrapper(endpoint, headers):
 def get_equipment():
     creds, pt = get_credentials(1500)
     at = get_auth_and_refresh_token(creds, pt)
-
-
     print(at)
 
     endpoint = '/V1/equipment?limit=2000'
@@ -82,14 +79,13 @@ def get_narratives_for_account_number(acct_num):
 
         narrative_texts = [x['narrative'] for x in all_narratives['narratives'] if x['narrative']]
         return narrative_texts
-
+    
+    def write_narratives_to_json(narrative_texts, acct_num):
+         with open('{}_checkpoint.json'.format(acct_num), 'w') as checkpoint_file:
+                  json.dump(narrative_texts, checkpoint_file)
+    
     texts = get_narratives(auth_tokens, postman_token)
-
-    if DEBUG:
-        with open('{}_checkpoint.json'.format(acct_num), 'w') as checkpoint_file:
-            json.dump(texts, checkpoint_file)
-
-    return texts
+    write_narratives_to_json(texts, acct_num)
 
 
 def word_count(narratives):
